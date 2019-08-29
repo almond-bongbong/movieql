@@ -1,41 +1,9 @@
-export let movies = [
-  {
-    id: 0,
-    name: 'Star Wars - The new one',
-    score: 0.1,
-  },
-  {
-    id: 1,
-    name: 'Avengers - The new one',
-    score: 8,
-  },
-  {
-    id: 3,
-    name: 'Logan',
-    score: 2,
-  },
-];
+import fetch from 'node-fetch'
 
-export const getMovies = () => movies;
+const API_URL = 'https://yts.am/api/v2/list_movies.json';
 
-export const getById = id => movies.find(m => m.id === id);
-
-export const deleteMovie = (id) => {
-  const cleanedMovie =  movies.filter(m => m.id !== id);
-  if (movies.length > cleanedMovie.length) {
-    movies = cleanedMovie;
-    return true;
-  } else {
-    return false;
-  }
-};
-
-export const addMovie = (name, score) => {
-  const newMovie = {
-    id: movies.length,
-    name,
-    score,
-  };
-  movies.push(newMovie);
-  return newMovie;
+export const getMovies = async (limit, rating) => {
+  const response = await fetch(`${API_URL}?limit=${limit}&minimum_rating=${rating}`);
+  const json = await response.json();
+  return json.data.movies;
 };
